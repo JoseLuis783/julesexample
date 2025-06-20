@@ -84,9 +84,9 @@ public class CalculatorApp {
             // Create panel for text fields
             JPanel inputOutputPanel = new JPanel(new GridLayout(3, 2, 5, 5)); // Added gaps
             inputOutputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Added padding
-            inputOutputPanel.add(new JLabel("Number 1:"));
+            inputOutputPanel.add(new JLabel("Numero real 1:")); // Changed label
             inputOutputPanel.add(CalculatorApp.numField1); // Use static field
-            inputOutputPanel.add(new JLabel("Number 2:"));
+            inputOutputPanel.add(new JLabel("Numero real 2:")); // Changed label
             inputOutputPanel.add(CalculatorApp.numField2); // Use static field
             inputOutputPanel.add(new JLabel("Result:"));
             inputOutputPanel.add(CalculatorApp.resultField); // Use static field
