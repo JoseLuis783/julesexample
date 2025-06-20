@@ -19,7 +19,9 @@ public class CalculatorApp {
 
             // Create text fields
             numField1 = new JTextField();
+            numField1.setEditable(true); // Explicitly set for clarity, though default
             numField2 = new JTextField();
+            numField2.setEditable(false); // Set to non-editable
             resultField = new JTextField();
             resultField.setEditable(false);
 
@@ -39,14 +41,23 @@ public class CalculatorApp {
 
             JButton addButton = new JButton("+");
             addButton.addActionListener(e -> {
-                try {
-                    firstNumber = Double.parseDouble(numField1.getText());
-                    operation = "+";
-                    numField2.setText(""); // Clear numField2 for new input
-                    numField2.requestFocus(); // Move focus to numField2
-                } catch (NumberFormatException ex) {
-                    resultField.setText("Error: Invalid number in Number 1");
-                    operation = ""; // Reset operation on error
+                String num1Text = numField1.getText();
+                if (num1Text.isEmpty()) {
+                    resultField.setText("Numero real 1 no puede estar vacio");
+                    numField2.setEditable(false); // Ensure numField2 is not editable
+                    operation = ""; // Reset operation
+                } else {
+                    try {
+                        firstNumber = Double.parseDouble(num1Text);
+                        operation = "+";
+                        numField2.setEditable(true); // Make editable
+                        numField2.setText(""); // Clear numField2 for new input
+                        numField2.requestFocusInWindow(); // Move focus to numField2
+                    } catch (NumberFormatException ex) {
+                        resultField.setText("Error: Numero real 1 invalido");
+                        numField2.setEditable(false); // Ensure numField2 is not editable
+                        operation = ""; // Reset operation on error
+                    }
                 }
             });
 
@@ -61,24 +72,31 @@ public class CalculatorApp {
                         numField1.setText(String.valueOf(result)); // Result becomes the new Number 1
                         firstNumber = result; // Store for potential chained operations
                         numField2.setText(""); // Clear Number 2 field
+                        numField2.setEditable(false); // Make non-editable after calculation
                         operation = ""; // Reset operation, ready for new one or new sequence
-                        numField1.requestFocus(); // Set focus to numField1 for next input or operation start
+                        numField1.requestFocusInWindow(); // Set focus to numField1
                     } catch (NumberFormatException ex) { // Correctly closes try, starts catch
                         resultField.setText("Error: Invalid number in Number 2");
                         operation = ""; // Reset operation on error too
                         firstNumber = 0; // Reset firstNumber
+                        numField2.setEditable(false); // Also make non-editable on error
                     } // Correctly closes catch
-                } // Correctly closes if
+                } else { // If operation is empty (e.g. user presses = without an operation)
+                    numField2.setEditable(false); // Ensure numField2 is not editable
+                }
             });
 
             JButton clearButton = new JButton("C");
             clearButton.addActionListener(e -> {
                 numField1.setText("");
+                numField1.setEditable(true); // Ensure numField1 is editable
+                numField1.setText("");
+                numField2.setEditable(false); // Make numField2 non-editable
                 numField2.setText("");
                 resultField.setText("");
                 operation = "";
                 firstNumber = 0;
-                numField1.requestFocus(); // Focus numField1 after clearing
+                numField1.requestFocusInWindow(); // Focus numField1 after clearing
             });
 
             // Create panel for text fields
@@ -88,7 +106,7 @@ public class CalculatorApp {
             inputOutputPanel.add(CalculatorApp.numField1); // Use static field
             inputOutputPanel.add(new JLabel("Numero real 2:")); // Changed label
             inputOutputPanel.add(CalculatorApp.numField2); // Use static field
-            inputOutputPanel.add(new JLabel("Result:"));
+            inputOutputPanel.add(new JLabel("Resultado:")); // Changed label
             inputOutputPanel.add(CalculatorApp.resultField); // Use static field
 
             // Create panel for buttons
